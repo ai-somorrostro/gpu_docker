@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir \
     torch-tb-profiler
 
 # Variables de entorno
-ENV PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:7168
+ENV PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:4192
 ENV HOME=/tmp
 
 # Crear directorio de configuración de Ultralytics
