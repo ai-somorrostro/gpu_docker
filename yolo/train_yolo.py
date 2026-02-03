@@ -23,9 +23,10 @@ def main():
     
     # Usar YOLOv8 nano (más ligero para pruebas)
     # El modelo se descarga automáticamente si no existe en ~/.cache/ultralytics
-    #model_name = "yolov8n.pt"
-    model_name=os.environ.get('MODEL', 'yolov8n.pt')
-    print(f"Using model: {model_name}")
+    model_name = os.environ.get('MODEL', 'yolov8n.pt')
+    
+    model = YOLO(model_name)
+    
     # Dataset YAML (desde variable de entorno o default)
     dataset_yaml = os.environ.get('DATASET_YAML', '')
     
