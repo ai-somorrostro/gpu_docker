@@ -1,13 +1,9 @@
 # Dockerfile para entrenamiento YOLO con TensorBoard garantizado
 FROM ultralytics/ultralytics:latest
 
-# Instalar dependencias adicionales (versiones específicas para compatibilidad)
-RUN pip install --no-cache-dir \
-    transformers \
-    supervision \
-    groundingdino-py \
-    tensorboard>=2.14.0 \
-    torch-tb-profiler
+# Copiar e instalar dependencias
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # Variables de entorno
 ENV PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:4192
