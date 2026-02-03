@@ -14,6 +14,13 @@ def main():
     # Cargar variables del .env
     load_dotenv()
     
+    # Limitar VRAM (0.0-1.0, donde 1.0 = 100% de la VRAM disponible)
+    vram_fraction = float(os.environ.get('VRAM_FRACTION', '0.25'))  # 25% default (~2GB en 8GB GPU)
+    if torch.cuda.is_available():
+        torch.cuda.set_per_process_memory_fraction(vram_fraction, device=0)
+        total_vram = torch.cuda.get_device_properties(0).total_memory / 1e9
+        print(f"VRAM limitada a {vram_fraction*100}% (~{vram_fraction * total_vram:.1f}GB de {total_vram:.1f}GB)")
+    
     dataset_path = os.environ.get('DATASET_PATH', '/workspace/dataset')
 
     # Activar TensorBoard ANTES de crear el modelo
