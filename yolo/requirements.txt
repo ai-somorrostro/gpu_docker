@@ -20,5 +20,8 @@ pillow
 pyyaml
 tqdm
 
+#roboflow
+roboflow==1.2.13
+
 # NumPy 1.26.4 (última 1.x estable compatible con PyTorch 2.1)
 numpy==1.26.4
