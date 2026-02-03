@@ -5,11 +5,15 @@ Descarga automáticamente el modelo si no existe
 """
 
 import os
+from dotenv import load_dotenv
 from ultralytics import YOLO, settings
 import torch
 from torch.utils.tensorboard import SummaryWriter
 
 def main():
+    # Cargar variables del .env
+    load_dotenv()
+    
     dataset_path = os.environ.get('DATASET_PATH', '/workspace/dataset')
 
     # Activar TensorBoard ANTES de crear el modelo
@@ -23,7 +27,7 @@ def main():
     
     # Usar YOLOv8 nano (más ligero para pruebas)
     # El modelo se descarga automáticamente si no existe en ~/.cache/ultralytics
-    model_name = os.environ.get('MODEL')
+    model_name = os.environ.get('MODEL', 'yolov8n.pt')
     
     model = YOLO(model_name)
     print(f"Using model: {model_name}")
