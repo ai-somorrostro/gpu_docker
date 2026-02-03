@@ -82,7 +82,7 @@ DOCKER_CMD="docker run $DOCKER_FLAGS \
   -v $(pwd)/runs:/workspace/runs \
   -v $(pwd)/$DATASET_DIR:/workspace/dataset \
   -v $SHARED_CACHE:/.cache/ultralytics \
-  -v $(pwd)/$ENV_FILE:/workspace/.env \
+  -v $(pwd)/$ENV_FILE:/tmp/.env \
   -e HOME=/ \
   -e PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:2048 \
   -e DATASET_YAML=\"$DATASET_YAML\""

@@ -12,7 +12,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 def main():
     # Cargar variables del .env
-    load_dotenv('/workspace/.env')
+    load_dotenv('/tmp/.env')
     
     # Limitar VRAM (0.0-1.0, donde 1.0 = 100% de la VRAM disponible)
     vram_fraction = float(os.environ.get('VRAM_FRACTION', '0.25'))  # 25% default (~2GB en 8GB GPU)
