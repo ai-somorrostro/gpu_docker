@@ -29,8 +29,8 @@ if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
     echo ""
     echo "Ejemplos:"
     echo "  $0"
-    echo "  $0 --detach scripts/train_yolo.py datasets/coco8/coco8 config/coco8.yaml"
-    echo "  $0 -d scripts/train_yolo.py datasets/coco8/coco8 config/coco8.yaml"
+    echo "  $0 --detach train_yolo.py datasets/coco8/coco8 config/coco8.yaml"
+    echo "  $0 -d train_yolo.py datasets/coco8/coco8 config/coco8.yaml"
     echo ""
     exit 0
 fi
@@ -47,8 +47,8 @@ echo "Dataset:     $DATASET_DIR"
 echo "YAML:        ${DATASET_YAML:-none}"
 echo "Env file:    ${ENV_FILE}"
 echo "Image:       $DOCKER_IMAGE"
-echo "VRAM limit:  7GB (max_split_size_mb:7168)"
-echo "RAM limit:   4GB"
+echo "VRAM limit:  2GB (max_split_size_mb:2048)"
+echo "RAM limit:   2GB"
 echo ""
 
 # Crear directorios con permisos correctos
@@ -75,7 +75,7 @@ fi
 DOCKER_CMD="docker run $DOCKER_FLAGS \
   --gpus all \
   --network host \
-  --memory=4g \
+  --memory=2g \
   --shm-size=2g \
   --user $(id -u):$(id -g) \
   -v $(pwd):/workspace \
@@ -83,7 +83,7 @@ DOCKER_CMD="docker run $DOCKER_FLAGS \
   -v $(pwd)/$DATASET_DIR:/workspace/dataset \
   -v $SHARED_CACHE:/.cache/ultralytics \
   -e HOME=/ \
-  -e PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:7168 \
+  -e PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:2048 \
   -e DATASET_YAML=\"$DATASET_YAML\""
 
 
