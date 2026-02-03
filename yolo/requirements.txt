@@ -22,6 +22,7 @@ tqdm
 
 #roboflow
 roboflow==1.2.13
+python-dotenv==1.2.1
 
 # NumPy 1.26.4 (última 1.x estable compatible con PyTorch 2.1)
 numpy==1.26.4
