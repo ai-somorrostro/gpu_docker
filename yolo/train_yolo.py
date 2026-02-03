@@ -44,15 +44,27 @@ def main():
         print("Uso: ./train.sh train_yolo.py dataset config/coco8.yaml")
         exit(1)
     
+    # Leer parámetros de entrenamiento
+    epochs = int(os.environ.get('EPOCHS', '10'))
+    imgsz = int(os.environ.get('IMG_SIZE', '640'))
+    batch_size = int(os.environ.get('BATCH_SIZE', '8'))
+    learning_rate = float(os.environ.get('LEARNING_RATE', '0.01'))
+    optimizer = os.environ.get('OPTIMIZER', 'Adam')
+    patience = int(os.environ.get('PATIENCE', '50'))
+    
+    # Imprimir parámetros
+    print(f"\nModelo: {model_name}")
+    print(f"Epochs: {epochs}, Batch: {batch_size}, ImgSize: {imgsz}, LR: {learning_rate}, Optimizer: {optimizer}, Patience: {patience}\n")
+    
     # Entrenar el modelo
     results = model.train(
         data=dataset_yaml,
-        epochs=int(os.environ.get('EPOCHS', '10')),
-        imgsz=int(os.environ.get('IMG_SIZE', '640')),
-        batch=int(os.environ.get('BATCH_SIZE', '8')),
-        lr0=float(os.environ.get('LEARNING_RATE', '0.01')),
-        optimizer=os.environ.get('OPTIMIZER', 'Adam'),
-        patience=int(os.environ.get('PATIENCE', '50')),
+        epochs=epochs,
+        imgsz=imgsz,
+        batch=batch_size,
+        lr0=learning_rate,
+        optimizer=optimizer,
+        patience=patience,
         project='/workspace/runs/detect',
         name='train',
         device=0,
