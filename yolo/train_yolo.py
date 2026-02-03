@@ -25,8 +25,6 @@ def main():
     tb_writer.flush()
     tb_writer.close()
     
-    # Usar YOLOv8 nano (más ligero para pruebas)
-    # El modelo se descarga automáticamente si no existe en ~/.cache/ultralytics
     model_name = os.environ.get('MODEL', 'yolov8n.pt')
     
     model = YOLO(model_name)
@@ -42,9 +40,12 @@ def main():
     # Entrenar el modelo
     results = model.train(
         data=dataset_yaml,
-        epochs=10,
-        imgsz=640,
-        batch=8,
+        epochs=int(os.environ.get('EPOCHS', '10')),
+        imgsz=int(os.environ.get('IMG_SIZE', '640')),
+        batch=int(os.environ.get('BATCH_SIZE', '8')),
+        lr0=float(os.environ.get('LEARNING_RATE', '0.01')),
+        optimizer=os.environ.get('OPTIMIZER', 'Adam'),
+        patience=int(os.environ.get('PATIENCE', '50')),
         project='/workspace/runs/detect',
         name='train',
         device=0,
