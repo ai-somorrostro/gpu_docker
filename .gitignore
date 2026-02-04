@@ -16,16 +16,17 @@
 
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
-
+datasets/
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.pot
 # C extensions
 *.so
-
+runs/
+*.pt
 # Distribution / packaging
 .Python
 build/
