@@ -82,44 +82,16 @@ def main():
     search_space = {}
     
     # Learning rate
-    lr0_min = get_env_float('LR0_MIN', 1e-5)
-    lr0_max = get_env_float('LR0_MAX', 1e-1)
+    lr0_min = get_env_float('LR0_MIN', 0.0001)
+    lr0_max = get_env_float('LR0_MAX', 0.01)
     search_space['lr0'] = tune.uniform(lr0_min, lr0_max)
     
     # Final learning rate factor
     lrf_min = get_env_float('LRF_MIN', 0.01)
-    lrf_max = get_env_float('LRF_MAX', 1.0)
+    lrf_max = get_env_float('LRF_MAX', 0.5)
     search_space['lrf'] = tune.uniform(lrf_min, lrf_max)
     
-    # Momentum
-    momentum_min = get_env_float('MOMENTUM_MIN', 0.6)
-    momentum_max = get_env_float('MOMENTUM_MAX', 0.98)
-    search_space['momentum'] = tune.uniform(momentum_min, momentum_max)
-    
-    # Weight decay
-    weight_decay_min = get_env_float('WEIGHT_DECAY_MIN', 0.0)
-    weight_decay_max = get_env_float('WEIGHT_DECAY_MAX', 0.001)
-    search_space['weight_decay'] = tune.uniform(weight_decay_min, weight_decay_max)
-    
-    # Warmup epochs
-    warmup_min = get_env_float('WARMUP_EPOCHS_MIN', 0.0)
-    warmup_max = get_env_float('WARMUP_EPOCHS_MAX', 5.0)
-    search_space['warmup_epochs'] = tune.uniform(warmup_min, warmup_max)
-    
-    # Loss weights
-    box_min = get_env_float('BOX_LOSS_MIN', 0.02)
-    box_max = get_env_float('BOX_LOSS_MAX', 0.2)
-    search_space['box'] = tune.uniform(box_min, box_max)
-    
-    cls_min = get_env_float('CLS_LOSS_MIN', 0.2)
-    cls_max = get_env_float('CLS_LOSS_MAX', 4.0)
-    search_space['cls'] = tune.uniform(cls_min, cls_max)
-    
-    # HSV augmentation
-    hsv_h_min = get_env_float('HSV_H_MIN', 0.0)
-    hsv_h_max = get_env_float('HSV_H_MAX', 0.1)
-    search_space['hsv_h'] = tune.uniform(hsv_h_min, hsv_h_max)
-    
+    # HSV augmentation (only S and V are tunable, H is fixed)
     hsv_s_min = get_env_float('HSV_S_MIN', 0.0)
     hsv_s_max = get_env_float('HSV_S_MAX', 0.9)
     search_space['hsv_s'] = tune.uniform(hsv_s_min, hsv_s_max)
@@ -134,7 +106,7 @@ def main():
     search_space['degrees'] = tune.uniform(degrees_min, degrees_max)
     
     translate_min = get_env_float('TRANSLATE_MIN', 0.0)
-    translate_max = get_env_float('TRANSLATE_MAX', 0.9)
+    translate_max = get_env_float('TRANSLATE_MAX', 0.3)
     search_space['translate'] = tune.uniform(translate_min, translate_max)
     
     scale_min = get_env_float('SCALE_MIN', 0.0)
@@ -145,31 +117,28 @@ def main():
     shear_max = get_env_float('SHEAR_MAX', 10.0)
     search_space['shear'] = tune.uniform(shear_min, shear_max)
     
-    perspective_min = get_env_float('PERSPECTIVE_MIN', 0.0)
-    perspective_max = get_env_float('PERSPECTIVE_MAX', 0.001)
-    search_space['perspective'] = tune.uniform(perspective_min, perspective_max)
-    
-    # Flip augmentation
-    flipud_min = get_env_float('FLIPUD_MIN', 0.0)
-    flipud_max = get_env_float('FLIPUD_MAX', 1.0)
-    search_space['flipud'] = tune.uniform(flipud_min, flipud_max)
-    
-    fliplr_min = get_env_float('FLIPLR_MIN', 0.0)
-    fliplr_max = get_env_float('FLIPLR_MAX', 1.0)
-    search_space['fliplr'] = tune.uniform(fliplr_min, fliplr_max)
-    
-    # Mosaic and Mixup
-    mosaic_min = get_env_float('MOSAIC_MIN', 0.0)
-    mosaic_max = get_env_float('MOSAIC_MAX', 1.0)
-    search_space['mosaic'] = tune.uniform(mosaic_min, mosaic_max)
-    
+    # Mixup augmentation (tunable)
     mixup_min = get_env_float('MIXUP_MIN', 0.0)
     mixup_max = get_env_float('MIXUP_MAX', 1.0)
     search_space['mixup'] = tune.uniform(mixup_min, mixup_max)
     
-    print("Search space configured:")
+    # Fixed augmentation parameters (not tuned)
+    fixed_params = {
+        'perspective': get_env_float('PERSPECTIVE', 0.0),
+        'flipud': get_env_float('FLIPUD', 0.0),
+        'fliplr': get_env_float('FLIPLR', 0.5),
+        'hsv_h': get_env_float('HSV_H', 0.015),
+        'mosaic': get_env_float('MOSAIC', 1.0),
+        'close_mosaic': get_env_int('CLOSE_MOSAIC', 10),
+    }
+    
+    print("Search space configured (tunable):")
     for param, space in search_space.items():
         print(f"  {param:15s}: {space}")
+    print()
+    print("Fixed parameters (not tuned):")
+    for param, value in fixed_params.items():
+        print(f"  {param:15s}: {value}")
     print()
     
     # Load model
@@ -195,6 +164,7 @@ def main():
         iterations=tune_iterations,
         grace_period=tune_grace_period,
         gpu_per_trial=1,
+        **fixed_params,  # Add fixed parameters
     )
     
     print("\n" + "="*70)
