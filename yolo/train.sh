@@ -86,7 +86,6 @@ DOCKER_CMD="docker run $DOCKER_FLAGS \
   -v $SHARED_CACHE:/.cache/ultralytics \
   -v $(pwd)/$ENV_FILE:/tmp/.env \
   -e HOME=/ \
-  -e PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:2048 \
   -e DATASET_YAML=\"$DATASET_YAML\""
 
 
