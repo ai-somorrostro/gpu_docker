@@ -42,13 +42,15 @@ DATASET_YAML="${3:-}"
 ENV_FILE="${4:-.env}"
 DOCKER_IMAGE="${DOCKER_IMAGE:-yolo-training-image}"
 
+RAM_LIMIT="${RAM_LIMIT:-8GB}"
+SHM_SIZE="${SHM_SIZE:-4g}"
 echo "Script:      $SCRIPT"
 echo "Dataset:     $DATASET_DIR"
 echo "YAML:        ${DATASET_YAML:-none}"
 echo "Env file:    ${ENV_FILE}"
 echo "Image:       $DOCKER_IMAGE"
-echo "VRAM limit:  2GB (max_split_size_mb:2048)"
-echo "RAM limit:   2GB"
+echo "RAM limit:   $RAM_LIMIT"
+echo "SHM size:    $SHM_SIZE"
 echo ""
 
 # Crear directorios con permisos correctos
@@ -75,8 +77,8 @@ fi
 DOCKER_CMD="docker run $DOCKER_FLAGS \
   --gpus all \
   --network host \
-  --memory=2g \
-  --shm-size=2g \
+  --memory=$RAM_LIMIT \
+  --shm-size=$SHM_SIZE \
   --user $(id -u):$(id -g) \
   -v $(pwd):/workspace \
   -v $(pwd)/runs:/workspace/runs \
@@ -84,7 +86,6 @@ DOCKER_CMD="docker run $DOCKER_FLAGS \
   -v $SHARED_CACHE:/.cache/ultralytics \
   -v $(pwd)/$ENV_FILE:/tmp/.env \
   -e HOME=/ \
-  -e PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:2048 \
   -e DATASET_YAML=\"$DATASET_YAML\""
 
 
