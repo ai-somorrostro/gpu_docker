@@ -173,6 +173,7 @@ def main():
             verbose=False,
             save=True,
             plots=True,
+            amp=False,
             **all_params
         )
         
