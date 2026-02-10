@@ -53,6 +53,7 @@ def main():
         dataset_yaml = f'/workspace/{dataset_yaml}'
     
     model_name = os.environ.get('MODEL', 'yolov8n.pt')
+    optimizer = os.environ.get('OPTIMIZER', 'auto')
     
     # Basic training parameters
     epochs = get_env_int('EPOCHS', 50)
@@ -64,6 +65,7 @@ def main():
     print(f"Batch size: {batch_size}")
     print(f"Image size: {imgsz}")
     print(f"Patience: {patience}")
+    print(f"Optimizer: {optimizer}")
     
     # Optuna configuration
     n_trials = get_env_int('TUNE_ITERATIONS', 50)
@@ -167,6 +169,7 @@ def main():
             imgsz=imgsz,
             patience=patience,
             batch=batch_size,
+            optimizer=optimizer,
             device=0,
             project=f'/workspace/runs/optuna/trial_{trial.number}',
             name='train',
