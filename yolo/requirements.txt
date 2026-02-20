@@ -22,7 +22,7 @@ tqdm
 
 # Hyperparameter optimization
 ray[tune]>=2.9.0
-
+optuna==4.7.0
 #roboflow
 roboflow==1.2.13
 python-dotenv==1.2.1
