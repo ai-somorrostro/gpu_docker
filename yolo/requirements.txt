@@ -30,6 +30,3 @@ python-dotenv==1.2.1
 # NumPy 1.26.4 (última 1.x estable compatible con PyTorch 2.1)
 numpy==1.26.4
 
-
-# joblib
-joblib==1.5.3
